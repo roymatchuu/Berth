@@ -1,0 +1,23 @@
+{
+  "name": "berth",
+  "version": "1.0.0",
+  "description": "new and improved Berth bot!",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/roymatchuu/Berth.git"
+  },
+  "author": "Roy Matthew Ramos",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/roymatchuu/Berth/issues"
+  },
+  "homepage": "https://github.com/roymatchuu/Berth#readme",
+  "dependencies": {
+    "discord.js": "^12.2.0",
+    "dotenv": "^8.2.0"
+  }
+}
