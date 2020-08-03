@@ -39,8 +39,9 @@ bot.on('message', msg => {
         case "ping":
             bot.commands.get('ping').execute(msg, args);
             break; 
-        
-
+        case "add": 
+            bot.commands.get('add').execute(msg, args);
+            break; 
     }
 });
 
