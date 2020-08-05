@@ -34,7 +34,6 @@ bot.on('message', msg => {
     if(!msg.content.startsWith(delim)) return;
 
     let args = msg.content.substring(delim.length).split(" "); 
-    
     switch(args[0]){
         case "ping":
             bot.commands.get('ping').execute(msg, args);
