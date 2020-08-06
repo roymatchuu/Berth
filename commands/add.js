@@ -1,13 +1,5 @@
 const post = require('pg');
 
-const pgclient = new post.Client({
-    user: process.env.DBUSER,
-    host: process.env.HOST, 
-    database: process.env.DATABASE, 
-    password: process.env.PASSWORD, 
-    port: process.env.PORT
-});
-
 function verify_date(arr){
     let test_month = parseInt(arr[0]);
     let test_day = parseInt(arr[1]);
@@ -41,8 +33,6 @@ module.exports = {
             return; 
         }
         else{
-            // msg.channel.send(`User: ${msg.mentions.members.first().user.tag}\n`);
-            // msg.channel.send(`Nickname: ${msg.mentions.members.first().nickname}\n`);
             let tag = msg.mentions.members.first().user.tag;
             let nick = msg.mentions.members.first().nickname;
             let discord_id = args[1];
@@ -56,11 +46,32 @@ module.exports = {
             let bmonth = parseInt(berth_input[0]);
             let bday = parseInt(berth_input[1]);
 
+            const pgclient = new post.Client({
+                user: process.env.DBUSER,
+                host: process.env.HOST, 
+                database: process.env.DATABASE, 
+                password: process.env.PASSWORD, 
+                port: process.env.PORT
+            });
+
             pgclient.connect(); 
-            pgclient.query(`INSERT INTO "${process.env.DISCSERVER}" ("user","discord_id","nickname","month", "day") VALUES ('${tag}','${discord_id}','${nick}', ${bmonth}, ${bday})`).then(res => {
-                
-                console.log(res.rows);
+
+            pgclient.query(`SELECT * FROM ${process.env.DISCSERVER} WHERE discord_id = '${args[1]}'`).then(res => {
+                // if length = 0, then there's already an entry 
+                if(res.rows.length > 0){
+                    msg.channel.send(`Berth already knows ${res.rows[0].user}'s birthday`);
+                    pgclient.end();
+                    return; 
+                }      
+            });
+            
+            
+            pgclient.query(`INSERT INTO ${process.env.DISCSERVER} ("user","discord_id","nickname","month", "day") VALUES ('${tag}','${discord_id}','${nick}', ${bmonth}, ${bday})`).then(res => {
+                if(res.oid == 0){
+                    msg.channel.send(`${tag}'s berthday added!`)
+                }
             }).finally(() => pgclient.end());
+
 
             // pgclient.query(`SELECT * FROM "${process.env.DISCSERVER}"`).then(res => {
             //     // const result = R.head(R.values(R.head(res.rows)));
