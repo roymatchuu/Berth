@@ -1,8 +1,11 @@
 // bot delimeter 
 const delim = "`";
 
+const dc = require('./daily_checker.js');
 const Discord = require("discord.js");
 const bot = new Discord.Client();
+
+const scheduler = require('node-cron');
 
 // uses dotenv to extract stored credentials 
 const { config } = require("dotenv");
@@ -22,7 +25,6 @@ for(const file of cmdFiles){
 
     bot.commands.set(cmd.name, cmd);
 }
-
 
 // Bot initialized 
 bot.on("ready", () => {
@@ -46,3 +48,12 @@ bot.on('message', msg => {
 
 // activate the bot using a token 
 bot.login(process.env.TOKEN);
+
+module.exports = bot;
+
+// 1 is 12 bc of daylight saving?
+let daily = scheduler.schedule('37 12 * * *', dc, 
+{
+    scheduled: true,
+    timezone: "America/Los_Angeles"
+});
