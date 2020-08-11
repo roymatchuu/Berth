@@ -43,6 +43,9 @@ bot.on('message', msg => {
         case "add": 
             bot.commands.get('add').execute(msg, args);
             break; 
+        case "bmonth":
+            bot.commands.get('bmonth').execute(msg, args);
+            break; 
     }
 });
 
@@ -52,8 +55,10 @@ bot.login(process.env.TOKEN);
 module.exports = bot;
 
 // 1 is 12 bc of daylight saving?
-let daily = scheduler.schedule('25 1 * * *', dc, 
+let daily = scheduler.schedule('45 13 * * *', dc, 
 {
     scheduled: true,
     timezone: "America/Los_Angeles"
 });
+
+daily.start();
