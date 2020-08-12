@@ -44,7 +44,7 @@ bot.on('message', msg => {
             bot.commands.get('add').execute(msg, args);
             break; 
         case "bmonth":
-            bot.commands.get('bmonth').execute(msg, args);
+            bot.commands.get('upcoming').execute(msg, args);
             break; 
     }
 });
