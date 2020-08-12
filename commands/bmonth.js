@@ -31,7 +31,12 @@ module.exports = {
                 let month_str = '```Here are the upcoming birthdays for the month of ' + monthNames[curr_month-1] + ':\n';
 
                 for(let i = 0; i < res.rows.length; i++){
-                    month_str += `• ${res.rows[i].user}: ${res.rows[i].month}/${res.rows[i].day}\n`;
+                    if(res.rows[i].nickname === 'undefined'){
+                        month_str += `• ${res.rows[i].user}: ${res.rows[i].month}/${res.rows[i].day}\n`;
+                    }
+                    else{
+                        month_str += `• ${res.rows[i].nickname}: ${res.rows[i].month}/${res.rows[i].day}\n`;
+                    }
                 }
 
                 month_str += '```';
