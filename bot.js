@@ -43,7 +43,7 @@ bot.on('message', msg => {
         case "add": 
             bot.commands.get('add').execute(msg, args);
             break; 
-        case "bmonth":
+        case "upcoming":
             bot.commands.get('upcoming').execute(msg, args);
             break; 
     }
