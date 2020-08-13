@@ -29,8 +29,7 @@ module.exports = {
     description: "adds the user's birthday to the database (`add @person m/d)",
     execute(msg, args){
         if(args[1] === undefined || args[2] === undefined){
-            msg.channel.send("Missing Arguments for the add birthday function");
-            return; 
+            msg.channel.send("`Missing Argument(s) for the add birthday function`");
         }
         else{
             let tag = msg.mentions.members.first().user.tag;
@@ -42,33 +41,36 @@ module.exports = {
                 msg.channel.send("Invalid Berthdate :cry:. Please try again!");
                 return;
             }
+            else{
+                let bmonth = parseInt(berth_input[0]);
+                let bday = parseInt(berth_input[1]);
 
-            let bmonth = parseInt(berth_input[0]);
-            let bday = parseInt(berth_input[1]);
+                const pgclient = new post.Client({
+                    user: process.env.DBUSER,
+                    host: process.env.HOST, 
+                    database: process.env.DATABASE, 
+                    password: process.env.PASSWORD, 
+                    port: process.env.PORT
+                });
 
-            const pgclient = new post.Client({
-                user: process.env.DBUSER,
-                host: process.env.HOST, 
-                database: process.env.DATABASE, 
-                password: process.env.PASSWORD, 
-                port: process.env.PORT
-            });
+                pgclient.connect(); 
 
-            pgclient.connect(); 
+                pgclient.query(`SELECT * FROM ${process.env.DISCSERVER} WHERE discord_id = '${args[1]}'`).then(res => {
+                    // if length = 0, then there's already an entry 
+                    if(res.rows.length > 0){
+                        msg.channel.send(`Berth already knows ${res.rows[0].user}'s birthday`);
+                    }
+                    else{
+                        pgclient.query(`INSERT INTO ${process.env.DISCSERVER} ("user","discord_id","nickname","month", "day") VALUES ('${tag}','${discord_id}','${nick}', ${bmonth}, ${bday})`).then(res => {
+                            if(res.oid == 0){
+                                msg.channel.send(`${tag}'s berthday added!`)
+                            }
+                        });
+                    }      
+                }).finally(() => pgclient.end());
+            }
 
-            pgclient.query(`SELECT * FROM ${process.env.DISCSERVER} WHERE discord_id = '${args[1]}'`).then(res => {
-                // if length = 0, then there's already an entry 
-                if(res.rows.length > 0){
-                    msg.channel.send(`Berth already knows ${res.rows[0].user}'s birthday`);
-                }
-                else{
-                    pgclient.query(`INSERT INTO ${process.env.DISCSERVER} ("user","discord_id","nickname","month", "day") VALUES ('${tag}','${discord_id}','${nick}', ${bmonth}, ${bday})`).then(res => {
-                        if(res.oid == 0){
-                            msg.channel.send(`${tag}'s berthday added!`)
-                        }
-                    });
-                }      
-            }).finally(() => pgclient.end());
+            
 
 
             // pgclient.query(`SELECT * FROM ${process.env.DISCSERVER} WHERE discord_id = '${args[1]}'`).then(res => {

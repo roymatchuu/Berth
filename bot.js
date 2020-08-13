@@ -46,6 +46,9 @@ bot.on('message', msg => {
         case "upcoming":
             bot.commands.get('upcoming').execute(msg, args);
             break; 
+        case "berthday":
+            bot.commands.get('berthday').execute(msg, args);
+            break; 
     }
 });
 
