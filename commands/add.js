@@ -52,22 +52,30 @@ module.exports = {
                     password: process.env.PASSWORD, 
                     port: process.env.PORT
                 });
-
+                
                 pgclient.connect(); 
-
+        
                 pgclient.query(`SELECT * FROM ${process.env.DISCSERVER} WHERE discord_id = '${args[1]}'`).then(res => {
                     // if length = 0, then there's already an entry 
                     if(res.rows.length > 0){
                         msg.channel.send(`Berth already knows ${res.rows[0].user}'s birthday`);
+                        pgclient.end();
                     }
                     else{
-                        pgclient.query(`INSERT INTO ${process.env.DISCSERVER} ("user","discord_id","nickname","month", "day") VALUES ('${tag}','${discord_id}','${nick}', ${bmonth}, ${bday})`).then(res => {
-                            if(res.oid == 0){
-                                msg.channel.send(`${tag}'s berthday added!`)
+                        pgclient.query(`INSERT INTO ${process.env.DISCSERVER} ("user","discord_id","nickname","month", "day") VALUES ('${tag}','${discord_id}','${nick}', ${bmonth}, ${bday})`).then(result => {
+                            console.log(`oid = ${result.oid}`);
+                            if(result.oid == 0){
+                                msg.channel.send(`${tag}'s berthday added!`);
                             }
-                        });
+
+                            pgclient.end();
+                        })
+                        // .catch((e) => {
+                        //     console.log('Error: ', e.message)});
                     }      
-                }).finally(() => pgclient.end());
+                }).catch((e) => {
+                    console.log('Error: ', e.message)});
+                //.finally(() => pgclient.end());
             }
 
             

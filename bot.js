@@ -58,7 +58,7 @@ bot.login(process.env.TOKEN);
 module.exports = bot;
 
 // 1 is 12 bc of daylight saving?
-let daily = scheduler.schedule('45 13 * * *', dc, 
+let daily = scheduler.schedule('*/5 * * * * *', dc, 
 {
     scheduled: true,
     timezone: "America/Los_Angeles"
