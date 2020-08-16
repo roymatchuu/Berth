@@ -63,48 +63,16 @@ module.exports = {
                     }
                     else{
                         pgclient.query(`INSERT INTO ${process.env.DISCSERVER} ("user","discord_id","nickname","month", "day") VALUES ('${tag}','${discord_id}','${nick}', ${bmonth}, ${bday})`).then(result => {
-                            console.log(`oid = ${result.oid}`);
                             if(result.oid == 0){
                                 msg.channel.send(`${tag}'s berthday added!`);
                             }
 
                             pgclient.end();
                         })
-                        // .catch((e) => {
-                        //     console.log('Error: ', e.message)});
                     }      
                 }).catch((e) => {
                     console.log('Error: ', e.message)});
-                //.finally(() => pgclient.end());
-            }
-
-            
-
-
-            // pgclient.query(`SELECT * FROM ${process.env.DISCSERVER} WHERE discord_id = '${args[1]}'`).then(res => {
-            //     // if length = 0, then there's already an entry 
-            //     if(res.rows.length > 0){
-            //         msg.channel.send(`Berth already knows ${res.rows[0].user}'s birthday`);
-            //         pgclient.end();
-            //         return; 
-            //     }      
-            // });
-            
-            
-            // pgclient.query(`INSERT INTO ${process.env.DISCSERVER} ("user","discord_id","nickname","month", "day") VALUES ('${tag}','${discord_id}','${nick}', ${bmonth}, ${bday})`).then(res => {
-            //     if(res.oid == 0){
-            //         msg.channel.send(`${tag}'s berthday added!`)
-            //     }
-            // }).finally(() => pgclient.end());
-
-
-            // pgclient.query(`SELECT * FROM "${process.env.DISCSERVER}"`).then(res => {
-            //     // const result = R.head(R.values(R.head(res.rows)));
-                
-            //     console.log(res.rows);
-            //     console.log(res.rows[0].user);
-            //     msg.channel.send(res.rows[0].user);
-            // }).finally(() => pgclient.end());
+                }
         }
         
     }

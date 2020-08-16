@@ -1,7 +1,7 @@
 const post = require('pg');
 
 module.exports = {
-    name: 'bmonth', 
+    name: 'upcoming', 
     description: "queries the upcoming birthdays for the month and returns them",
     execute(msg, args){
         // determines the date when the command call was made to determine month and day
@@ -24,7 +24,7 @@ module.exports = {
         // •
         pgclient.query(`SELECT * FROM ${process.env.DISCSERVER} WHERE month = '${curr_month}' AND day > '${curr_day}' ORDER BY day`).then(res => {
             if(res.rows.length === 0){
-                let none_str = "There are no upcoming birthdays for the rest of " + monthNames[monthNames];
+                let none_str = "There are no upcoming birthdays for the rest of " + monthNames[curr_month - 1] + ".";
                 msg.channel.send(none_str);
             }
             else{

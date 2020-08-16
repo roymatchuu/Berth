@@ -22,7 +22,7 @@ module.exports = {
 
             pgclient.query(`SELECT * FROM ${process.env.DISCSERVER} WHERE discord_id = '${args[1]}'`).then(res => {
                 if(res.rows.length === 0){
-                    msg.channel.send(`Berth does not recall recording ${args[1]}'s birthday.`);
+                    msg.channel.send(`Berth does not recall recording ${args[1]}'s birthday. Use the add command to add someone's birthday to the database!`);
                 }
                 else{
                     let bday_found = "`" + res.rows[0].user + "'s birthday is on " + res.rows[0].month + "/" + res.rows[0].day + "`";

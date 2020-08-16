@@ -21,7 +21,6 @@ function getRandomInt(max) {
 function daily_check(){ 
     let bot = require('./bot.js');
     let today = new Date(); 
-    // console.log("Let's goooo!");
 
     const pgclient = new post.Client({
         user: process.env.DBUSER,
@@ -33,14 +32,10 @@ function daily_check(){
 
     let curr_month = today.getMonth()+1
     let curr_day = today.getDate();
-    console.log(`month: ${curr_month} day: ${curr_day}`);
-
     
     pgclient.connect();
     
     pgclient.query(`SELECT * FROM ${process.env.DISCSERVER} WHERE month = '${curr_month}' AND day = '${curr_day}'`).then(res => {
-    // pgclient.query(`SELECT * FROM ${process.env.DISCSERVER} WHERE month = '4' AND day = '23'`).then(res => {
-        console.log(`res.rows.length is ${res.rows.length}`);
         if(res.rows.length == 0){
             return; 
         }
@@ -57,7 +52,7 @@ function daily_check(){
                 .setDescription(bday_greetings[getRandomInt(bday_greetings.length - 1)])
                 .setImage(bday_gifs[getRandomInt(bday_gifs.length - 1)]);
 
-                let send_str = `Today is ${res.rows[i].discord_id}'s birthday!`;          
+                let send_str = `@everyone Today is ${res.rows[i].discord_id}'s birthday!`;          
                 try{
                     bot.channels.cache.get(`${process.env.DISCHANNEL}`).send(`${send_str}`);
                     bot.channels.cache.get(`${process.env.DISCHANNEL}`).send(embed);

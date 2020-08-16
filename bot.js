@@ -1,5 +1,5 @@
 // bot delimeter 
-const delim = "`";
+const delim = "^";
 
 const dc = require('./daily_checker.js');
 const Discord = require("discord.js");
@@ -29,7 +29,7 @@ for(const file of cmdFiles){
 // Bot initialized 
 bot.on("ready", () => {
     console.log(`${bot.user.username} is online!`);
-    bot.user.setActivity('Birthdays', { type: 'WATCHING' });
+    bot.user.setActivity('Birthdays (^help)', { type: 'WATCHING' });
 });
 
 bot.on('message', msg => {
@@ -49,6 +49,9 @@ bot.on('message', msg => {
         case "berthday":
             bot.commands.get('berthday').execute(msg, args);
             break; 
+        case "help":
+            bot.commands.get('help').execute(msg, args);
+            break; 
     }
 });
 
@@ -58,7 +61,7 @@ bot.login(process.env.TOKEN);
 module.exports = bot;
 
 // 1 is 12 bc of daylight saving?
-let daily = scheduler.schedule('*/5 * * * * *', dc, 
+let daily = scheduler.schedule('00 11 * * *', dc, 
 {
     scheduled: true,
     timezone: "America/Los_Angeles"
